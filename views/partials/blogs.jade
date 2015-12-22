@@ -1,0 +1,17 @@
+h3 {{blog.title}}
+form(ng-show='isLoggedIn()', ng-submit='addPost()')
+	input(type='text', class='form-control', placeholder='Add an update to {{blog.title}}', ng-model='body')
+	br
+	button(type='submit', class='btn btn-primary') Post
+div(ng-repeat="post in blog.posts | orderBy:'-date'")
+	br
+	span {{post.body}} 
+		
+	span
+		a(class="glyphicon glyphicon-remove", href='', ng-show='isLoggedIn()', ng-click='deletePost(post)')
+	br
+	small 
+		i posted on {{post.date}} by {{post.author}}
+span(ng-if='blog.posts.length === 0')
+	br  
+	i There are currently no posts in this blog
