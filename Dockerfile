@@ -1,0 +1,9 @@
+# DOCKER-VERSION 1.9.1
+
+FROM nodesource/node:5.1.1
+
+ADD package.json package.json
+RUN npm install
+ADD . .
+
+CMD ["node","app.js"]
