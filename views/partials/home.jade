@@ -1,17 +1,22 @@
 h3 Current Blogs
-div(ng-repeat="blog in blogs | orderBy: 'title'")
+
+div(ng-show='error', class='alert alert-danger')
+	strong {{error.message}}
+
+div(ng-repeat="blog in blogs | orderBy: 'date'")
 	h4
 		a(ng-href='#/blogs/{{blog._id}}') {{blog.title}} 
-		a(class="glyphicon glyphicon-remove", href='', ng-show='isLoggedIn()', ng-click='deleteBlog(blog)')
+		a(class="glyphicon glyphicon-remove", href='', ng-show='isOwner(blog.owner)', ng-click='deleteBlog(blog)')
 		br
 		small
 			i by  {{blog.owner}}
-br
-span(ng-if='blogs.length === 0')
+
+div(ng-if='blogs.length === 0')
 	h5 
 		i There are currently no blogs
 	br
+
 form(ng-show='isLoggedIn()', ng-submit='addBlog()')
-	input(type='text', class='form-control', placeholder='Create a new blog', ng-model='title')
+	input(type='text', class='form-control', placeholder='Enter a new blog name', ng-model='title')
 	br
 	button(type='submit', class='btn btn-primary') Create a new blog

@@ -20,6 +20,7 @@ app.factory('auth', function($http, $window){
 		return payload.exp > (Date.now()/1000); 
 	};
 
+
 	auth.currentUser = function() {
 		if (auth.isLoggedIn()) {
 			var token = auth.getToken();
@@ -47,7 +48,7 @@ app.factory('auth', function($http, $window){
 	return auth;
 });
 
-app.factory('blogs', function($http, auth) {
+app.factory('blogs', function($http, auth, Upload) {
 	var blogs = { blogs: [] };
 
 	blogs.getAll = function() {
@@ -79,7 +80,7 @@ app.factory('blogs', function($http, auth) {
 		});	
 	};
 
-	blogs.createPost = function(id, post) {
+	blogs.createPost = function(id, post, Upload) {
 		return $http.post('api/blogs/' + id + '/posts', post,
 			{headers: {Authorization: 'Bearer '+auth.getToken()}}
 		);
@@ -89,10 +90,6 @@ app.factory('blogs', function($http, auth) {
 		return $http.delete('api/blogs/' + blog._id + '/posts/' + post._id,
 			{headers: {Authorization: 'Bearer '+auth.getToken()}}
 		);
-	};
-
-	blogs.isLoggedIn = function() {
-		return auth.isLoggedIn();
 	};
 
 	return blogs;

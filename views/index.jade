@@ -3,11 +3,13 @@ html(lang='en')
 	head
 		meta(charset='utf-8')
 		meta(name='viewport', content='width=device-width,initial-scale=1')
-		link(rel='stylesheet', href='https://bootswatch.com/cerulean/bootstrap.min.css')
+		link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.6/cerulean/bootstrap.min.css')
 		title= title
 		script(src='http://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js')
 		script(src='http://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular-resource.min.js')
-		script(src="http://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.10/angular-ui-router.js")
+		script(src='http://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.15/angular-ui-router.min.js')
+		script(src='http://cdnjs.cloudflare.com/ajax/libs/danialfarid-angular-file-upload/11.0.0/ng-file-upload-shim.min.js')
+		script(src='http://cdnjs.cloudflare.com/ajax/libs/danialfarid-angular-file-upload/11.0.0/ng-file-upload.min.js')
 		script(src='javascripts/app.js')
 		script(src='javascripts/controllers.js')
 		script(src='javascripts/factories.js')
@@ -15,17 +17,17 @@ html(lang='en')
 	body(ng-app='meanBlog')
 		nav(class='navbar navbar-default navbar-static-top', ng-controller='NavCtrl')
 			strong
-				a(class='navbar-brand' href='#/home') MEAN microblogs
+				a(class='navbar-brand' href='#/home')= title 
 			div(class='container-fluid')
 				strong
-				ul(class='nav navbar-nav navbar-right')
-					li(ng-show='isLoggedIn()')
-						a Hi, {{ currentUser() }}!
-					li(ng-show='isLoggedIn()')
-						a(href='', ng-click='logout()') Log out 
-					li(ng-hide='isLoggedIn()')
-						a(href='/#/login') Log in
-					li(ng-hide='isLoggedIn()')
-						a(href='/#/register') Register
+					ul(class='nav navbar-nav navbar-right')
+						li(ng-show='isLoggedIn()')
+							a Hi, {{ currentUser() }}!
+						li(ng-show='isLoggedIn()')
+							a(href='', ng-click='logout()') Log out 
+						li(ng-hide='isLoggedIn()')
+							a(href='/#/login') Log in
+						li(ng-hide='isLoggedIn()')
+							a(href='/#/register') Register
 		div(class='container-fluid')
 			div(ui-view)

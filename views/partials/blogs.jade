@@ -1,17 +1,25 @@
 h3 {{blog.title}}
-form(ng-show='isLoggedIn()', ng-submit='addPost()')
-	input(type='text', class='form-control', placeholder='Add an update to {{blog.title}}', ng-model='body')
+
+div(ng-show='error', class='alert alert-danger')
+	strong {{error.message}}
+
+form(enctype='multipart/form-data' ng-show='isOwner()', ng-submit='addPost(file)')
+	input(type='text', class='form-control', placeholder="Add an update to '{{blog.title}}'", data-ng-model='body')
+	span Select an image (optional):
+		input(name='file', type='file', accept='image/*', ngf-select, data-ng-model='file', ngf-max-size='10MB')
 	br
-	button(type='submit', class='btn btn-primary') Post
+	button(type='submit', class='btn btn-primary') Post Update
+
 div(ng-repeat="post in blog.posts | orderBy:'-date'")
 	br
 	span {{post.body}} 
-		
 	span
-		a(class="glyphicon glyphicon-remove", href='', ng-show='isLoggedIn()', ng-click='deletePost(post)')
+		a(class="glyphicon glyphicon-remove", href='', ng-show='isOwner()', ng-click='deletePost(post)')
 	br
-	small 
+	img(ng-if='post.imageUrl' ng-src='{{post.imageUrl}}' class='img-responsive' style='border:2px solid black;')
+	small
 		i posted on {{post.date}} by {{post.author}}
-span(ng-if='blog.posts.length === 0')
+
+div(ng-if='blog.posts.length === 0')
 	br  
-	i There are currently no posts in this blog
+	i There are currently no posts in '{{blog.title}}'

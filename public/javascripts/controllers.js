@@ -1,4 +1,5 @@
 'use strict';
+
 var app = angular.module('meanBlog');
 
 app.controller('AuthCtrl', function($scope, $state, auth) {
@@ -30,6 +31,10 @@ app.controller('NavCtrl', function($scope, auth) {
 app.controller('MainCtrl', function($scope, auth, blogs){
 	$scope.isLoggedIn = auth.isLoggedIn;
 
+	$scope.isOwner = function(owner) {
+		return auth.currentUser() === owner;
+	};
+
 	$scope.blogs = blogs.blogs;
 
 	$scope.addBlog = function(){
@@ -40,31 +45,54 @@ app.controller('MainCtrl', function($scope, auth, blogs){
 	};
 
 	$scope.deleteBlog = function(blog) {
-		blogs.deleteBlog(blog);
+		if (confirm('Really delete \'' + blog.title + '\'?'))
+			blogs.deleteBlog(blog);
 	};
 });
 
-app.controller('BlogsCtrl', function($scope, auth, blogs, blog) {
+app.controller('BlogsCtrl', function($scope, $state, auth, blogs, blog, Upload) {
 	$scope.isLoggedIn = auth.isLoggedIn;
+
+	$scope.isOwner = function () {
+		return auth.currentUser() === blog.owner;
+	};
 
 	$scope.blog = blog;
 
-	$scope.addPost = function(){
+	$scope.addPost = function(file){
 		if ( !$scope.body || $scope.body === '' )
 			return;
-		blogs.createPost(
-			blog._id,
-			{ 
-				body: $scope.body
-			})
+
+		var post = {body: $scope.body};
+
+		if (file)
+		{
+			post.file = file;
+			Upload.upload({
+				url: 'api/blogs/' + blog._id + '/posts',
+				headers: {Authorization: 'Bearer '+auth.getToken()},
+				data: post
+			}).then( function (res) {
+				// Just reload to get the image from the db
+				$state.reload();
+			}, function (res) {
+				$scope.error = 'Failed to add post';			
+			});
+		} else {
+			blogs.createPost(blog._id, post)
 			.success( function(post) {
 				$scope.blog.posts.push(post);
+			}).error( function(error) {
+				$scope.error = error;
 			});
+		}
 		$scope.body = '';
+		$scope.file = '';
 	};
 
 	$scope.deletePost = function(post) {
-		blogs.deletePost( blog, post )
+		if (confirm('Really delete this post?'))
+			blogs.deletePost( blog, post )
 			.success( function() {
 				blog.posts.splice(blog.posts.indexOf(post), 1);
 			});
