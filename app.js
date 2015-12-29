@@ -14,7 +14,7 @@ require('./models/Posts');
 require('./models/Users');
 require('./config/passport');
 
-mongoose.connect('mongodb://localhost:27017/meandb');
+mongoose.connect('mongodb://mongodb:27017/meandb');
 
 var routes = require('./routes/index');
 var api = require('./routes/api');
