@@ -12,7 +12,6 @@ var passport = require('passport');
 require('./models/Blogs');
 require('./models/Posts');
 require('./models/Users');
-require('./models/Images');
 require('./config/passport');
 
 mongoose.connect('mongodb://localhost:27017/meandb');
