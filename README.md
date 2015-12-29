@@ -1,7 +1,7 @@
 Dockerized mean stack microblog
 
 1. Build the node app container: 
-  * docker build -i meanblog
+  * docker build -i meanblog .
 2. Start the mongodb container: 
   * docker run --name myMongo -d mongo
 3. Start the node app container: 
